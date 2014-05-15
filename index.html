@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>JavaScript virtual machines</title>
+    <title>DOM Sweet DOOM</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=680, user-scalable=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -273,6 +273,77 @@ right: 80px;">DOM API</span>
         <h2 style="font-size:100px;">ReactJS</h2>
     </div>
 </section>
+<section class="slide" style="text-align: center">
+    <img style="padding-top: 30px"  src="img/reactComp.png">
+    <div style="font-size: 16px;position: static;width: auto;height: auto;padding: 0"><i>Исходное состояние к первому</i>
+        <ul style="margin-bottom: 0px">
+            <li>Создать узел: <code>&lt;div className="first"&gt;&lt;span&gt;A Span&lt;/span&gt;&lt;/div&gt;</code></li>
+        </ul>
+        <i>Первое ко второму</i>
+        <ul style="margin-bottom: 0px">
+            <li>Заменить атрибут: <code>className="first"</code> на <code>className="second"</code></li>
+            <li>Заменяем узел: <code>&lt;span&gt;A Span&lt;/span&gt;</code> на <code>&lt;p&gt;A Paragraph&lt;/p&gt;</code></li>
+        </ul>
+        <i>Второе к конечному</i>
+        <ul style="margin-bottom: 0px">
+            <li>Удалить узел: <code>&lt;div className="second"&gt;&lt;p&gt;A Paragraph&lt;/p&gt;&lt;/div&gt;</code></li>
+        </ul></div>
+</section>
+<section class="slide" style="text-align: center">
+    <img src="img/tree.png" style="
+    height: 252px;
+">
+    <p style="
+    font-size: 20px;
+    padding: 0 38px;
+">Нахождение минимального количества модификаций между двумя произвольными деревьями — задача O(n^3). Как вы могли догадаться, это неособо подходит для наших задач, поэтому React использует простой и весьма эффективный эвристический метод для нахождения аппроксимации, которая позволяет добиться сложности алгоритма, приближенной к O(n).
+
+        React просто сравнивает деревья по внутренним узлам. Это радикально меняет сложность алгоритма и не является большой потерей, т.к. в веб-приложениях нам очень редко приходится заниматься «вертикальным»(по разным уровням) перемещением внутреннего узла. Обычно мы перемещаем узлы «горизонтально»(на одном уровне).</p>
+
+</section>
+<section class="slide" style="text-align: center">
+    <img  src="img/stateReact.png">
+</section>
+<section class="slide" style="text-align: center">
+    <img  src="img/redrawReact.png">
+</section>
+<section class="slide" style="text-align: center">
+    <h2>shouldComponentUpdate</h2>
+    <img  src="img/shouldCompUpdate.png">
+</section>
+<section class="slide cover" style="text-align: center">
+    <div>
+        <h2 style="color: #ffffff; padding-top:200px ">А можно еще быстрее?</h2>
+        <img  src="img/flash-03.png">
+    </div>
+</section>
+<section class="slide shout">
+    <div>
+        <h2 style="font-size:100px;">BasisJS</h2>
+    </div>
+</section>
+<section class="slide " style="text-align: center">
+    <img  src="img/principeBasis.png">
+    <sup style="bottom:0;left:20px;position:absolute;font-size: 12px;">Source: Roman Dvornov - Как посторить DOM</sup>
+</section>
+<section class="slide" style="text-align: center">
+    <img  src="img/basisJs.png">
+    <sup style="bottom:0;left:20px;position:absolute;font-size: 12px;">Source: Roman Dvornov - Как посторить DOM</sup>
+</section>
+<section class="slide">
+    <div>
+        <h2>links</h2>
+        <ul>
+            <li><a href="http://www.slideshare.net/basisjs/dom-27356908">Как построить DOM</a></li>
+            <li><a href="http://www.slideshare.net/basisjs/ss-32305540">Не бойся, это всего лишь данные... просто их много</a></li>
+            <li><a href="http://basisjs.com/">basis.js</a></li>
+            <li><a href="http://calendar.perfplanet.com/2013/diff/">React’s diff algorithm
+                by Christopher Chedeau</a></li>
+            <li><a href="http://facebook.github.io/react/">http://facebook.github.io/react/</a></li>
+        </ul>
+    </div>
+</section>
+
 <section class="slide">
     <div>
         <h2>Контакты</h2>
@@ -289,7 +360,11 @@ right: 80px;">DOM API</span>
         <img style=" height: 100%; width: 100%;" src="img/tlen.png">
     </div>
 </section>
-
+<section class="slide shout">
+    <div>
+        <h2>Вопросы?</h2>
+    </div>
+</section>
 <div class="progress">
     <div></div>
 </div>
