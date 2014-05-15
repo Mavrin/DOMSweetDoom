@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="shower/themes/ribbon/styles/screen.css">
     <style type="text/css">
         p.annotation {
-            margin-bottom:0;
+            margin-bottom: 0;
         }
     </style>
 </head>
@@ -17,21 +17,271 @@
     <h1>DOM Sweet DOOM</h1>
 
     <p><a href="https://twitter.com/krivlenia">Константин Кривленя</a></p>
+
     <p>Компания <a href="http://www.targetprocess.com/3/">Taucraft</a></p>
 </header>
 <section class="slide cover">
     <div>
         <img style=" height: 100%; width: 100%;" src="img/doom2-1.jpg">
+
         <h2 style="font-size:120px;color: #ffffff;text-align: center;margin-top: 190px;">Sweet</h2>
+
         <h2 style="font-size:120px;color: #ffffff;text-align: center;">DOM</h2>
     </div>
 </section>
 <section class="slide">
     <div>
+        <style>
+            .perception {
+                border: 1px solid #000000;
+            }
+
+            .perception tr:first-child {
+                color: #ffffff;
+                background: #0174A7;
+            }
+
+            .perception td {
+                padding: 10px;
+                border: 1px solid #000000;
+            }
+        </style>
+        <table class="perception">
+            <tr>
+                <td>Delay</td>
+                <td>User perception</td>
+            </tr>
+            <tr>
+                <td>0-100ms</td>
+                <td>Instant</td>
+            </tr>
+            <tr>
+                <td>100-300ms</td>
+                <td>Small perceptible delay</td>
+            </tr>
+            <tr>
+                <td style="border-bottom-color: red !important;">300-1000ms</td>
+                <td style="border-bottom-color: red !important;">Machine is working</td>
+            </tr>
+            <tr>
+                <td>1.000+ ms</td>
+                <td>Likely mental context switch</td>
+            </tr>
+            <tr>
+                <td>10.000 ms</td>
+                <td>Task is abandoned</td>
+            </tr>
+        </table>
+        <sup style="font-size: 12px;">Source: Ilya Grigorik - High Performance Browser Networking</sup>
+    </div>
+</section>
+
+<section class="slide">
+    <div style="display: table-cell; vertical-align: middle;text-align: center;">
+        <img style="vertical-align: middle;text-align: center;" src="img/Losi.png">
+    </div>
+</section>
+<section class="slide cover">
+    <img style=" height: 100%; width: 100%;" src="img/mortal-kombat-9-200810_f05.jpg">
+
+    <div>
+        <span style="font-size:80px;color: #ffffff;text-align: left;margin-top: 190px;
+position: absolute;
+left: 30px;">Inner Html</span>
+        <span style="font-size:80px;color: #ffffff;text-align: right;margin-top: 190px;
+position: absolute;
+right: 80px;">DOM API</span>
+    </div>
+</section>
+<section class="slide">
+    <div>
+        <div>Mary had a <strong>little</strong> lamb. It's fleece was white as snow.</div>
+        10000 times
+        <p style="margin-bottom: 10px">
+            <input data-method="innerhtml" type="button" value="innerHTML">
+            <input data-method="domnodes" type="button" value="DOM nodes">
+            <input data-method="reset" type="button" value="Reset Values">
+        </p>
+        <input type="text" class="result" id="innerhtml-value" value="0">
+        <input type="text" class="result" id="domnodes-value" value="0">
+        <br/>
+        <!-- code -->
+		<span style="font-size: 14px">
+                var html = [];
+                ++iters;
+                while (--iters > 0) {
+                html[html.length] = content.string;
+                }
+                document.getElementById('innerhtml').innerHTML = html.join('');
+            </span>
+        <hr>
+		<span style="font-size: 14px">var frag = document.createDocumentFragment();
+                ++iters;
+                while (--iters > 0) {
+                frag.appendChild(content.dom.cloneNode(true));
+                }
+                document.getElementById('domnodes').appendChild(frag);</span>
+
+
+
+
+
+        <div id="innerhtml"  class="column"></div>
+        <div id="domnodes" class="column"></div>
+        <script type="text/javascript">
+
+            (function () {
+                var startTime, endTime, content, tests;
+
+                content = {
+                    // a simple string to be attached via innerHTML
+                    string: '<div>Mary had a <strong>little</strong> lamb. It\u2019s fleece was white as snow.</div>',
+
+                    // a node to be attached using DOM methods
+                    dom: (function () {
+                        var node, strong;
+                        node = document.createElement('DIV');
+                        node.appendChild(document.createTextNode('Mary had a '));
+                        strong = document.createElement('STRONG');
+                        strong.appendChild(document.createTextNode('little'));
+                        node.appendChild(strong);
+                        node.appendChild(document.createTextNode(' lamb. It\u2019s fleece was white as snow.'));
+                        return node;
+                    })()
+                };
+
+                function testStart(method) {
+                    var iters;
+                    document.getElementById(method).innerHTML = '';
+                    iters = 10000;
+                    tests[method](iters);
+                }
+
+                function testReset() {
+                    document.getElementById('innerhtml').innerHTML = '';
+                    document.getElementById('domnodes').innerHTML = '';
+                    document.getElementById('innerhtml-value').value = 0;
+                    document.getElementById('domnodes-value').value = 0;
+                }
+
+                function timerStart() {
+                    return (new Date()).getTime();
+                }
+
+                function timerEnd(start, id) {
+                    // PPK's method: http://www.quirksmode.org/blog/archives/2009/08/when_to_read_ou.html
+                    setTimeout(function () {
+                        document.getElementById(id).value = ((new Date()).getTime() - start) + ' milliseconds';
+                    }, 10);
+                }
+
+                function innerhtml(iters) {
+                    // testing the loop, etc., because i'm trying to measure the whole, "real world" operation
+                    var start = timerStart();
+
+                    var html;
+                    html = [];
+                    ++iters;
+                    while (--iters > 0)
+                    {
+                        html[html.length] = content.string;
+                    }
+
+                    document.getElementById('innerhtml').innerHTML = html.join('');
+
+                    // test done, report results
+                    timerEnd(start, 'innerhtml-value');
+                }
+
+                function domnodes(iters) {
+                    // testing the loop, etc., because i'm trying to measure the whole, "real world" operation
+                    var start = timerStart();
+
+                    var frag;
+                    frag = document.createDocumentFragment();
+                    ++iters;
+                    while (--iters > 0)
+                    {
+                        frag.appendChild(content.dom.cloneNode(true));
+                    }
+                    document.getElementById('domnodes').appendChild(frag);
+
+                    // test done, report results
+                    timerEnd(start, 'domnodes-value');
+                }
+
+                tests = {
+                    innerhtml: innerhtml,
+                    domnodes: domnodes
+                };
+
+
+                var each = [].forEach;
+                var listener = function (evt) {
+                    var method = evt.currentTarget.dataset.method;
+                    if ('reset' === method)
+                    {
+                        testReset();
+                    }
+                    else
+                    {
+                        testStart(method);
+                    }
+                };
+                each.call(document.querySelectorAll('input[type=button]'), function (element) {
+                    element.addEventListener('click', listener, false);
+                });
+
+
+            })()
+
+        </script>
+    </div>
+</section>
+<section class="slide cover">
+    <img style=" height: 100%; width: 100%;" src="img/toni-stark_20795641_big_.jpeg">
+</section>
+<section class="slide" style="text-align: center">
+    <img src="img/why1.gif">
+</section>
+<section class="slide cover">
+    <h2 style="text-align: center;padding-top: 40px;">Частый подход.</h2>
+    <img style=" height: 100%; width: 100%;" src="img/typicalApproach.png">
+    <sup style="bottom:0;left:20px;position:absolute;font-size: 12px;">Source: Roman Dvornov - Не бойся, это всего лишь данные... просто их много</sup>
+</section>
+<section class="slide" style="text-align: center">
+    <img style="padding-top:  100px" src="img/muzhik-bleat_50599501_orig_.jpg">
+</section>
+<section class="slide cover">
+    <h2 style="text-align: center;padding-top: 10px;">Вот клево.</h2>
+    <img style=" height: 100%; width: 100%;" src="img/perfect.png">
+    <sup style="bottom:0;left:20px;position:absolute;font-size: 12px;">Source: Roman Dvornov - Не бойся, это всего лишь данные... просто их много</sup>
+</section>
+<section class="slide" style="text-align: center">
+    <h2 style="text-align: center;padding-top: 10px;">Как сделать.</h2>
+    <img style="padding-top: 50px" src="img/kak_sdelat_samoletik.gif">
+</section>
+<section class="slide" style="text-align: center">
+    <h2 style="text-align: center;padding-top: 10px;">Как-то так.</h2>
+    <img style="padding-top: 20px" src="img/13708536843952.jpg">
+</section>
+<section class="slide" style="text-align: center">
+    <img  src="img/petrosyan_16285162_orig_.jpg">
+</section>
+<section class="slide shout">
+    <div>
+        <h2 style="font-size:100px;">ReactJS</h2>
+    </div>
+</section>
+<section class="slide">
+    <div>
         <h2>Контакты</h2>
-        <a style="background:url(img/twitter-bird-light-bgs.png) no-repeat;padding-left:40px;" href="https://twitter.com/Krivlenia">Twitter (https://twitter.com/Krivlenia/)</a><br>
-        <a style="background:url(img/GitHub-Mark-32px.png) no-repeat;padding-left:40px;" href="https://github.com/Mavrin">Github (https://github.com/Mavrin/)</a><br>
-        <a style="background:url(img/habrahabr.png) center left no-repeat;padding-left:20px;" href="http://habrahabr.ru/users/mavrin/">Хабр (http://habrahabr.ru/users/mavrin/)</a><br>
+        <a style="background:url(img/twitter-bird-light-bgs.png) no-repeat;padding-left:40px;"
+           href="https://twitter.com/Krivlenia">Twitter (https://twitter.com/Krivlenia/)</a><br>
+        <a style="background:url(img/GitHub-Mark-32px.png) no-repeat;padding-left:40px;"
+           href="https://github.com/Mavrin">Github (https://github.com/Mavrin/)</a><br>
+        <a style="background:url(img/habrahabr.png) center left no-repeat;padding-left:20px;"
+           href="http://habrahabr.ru/users/mavrin/">Хабр (http://habrahabr.ru/users/mavrin/)</a><br>
     </div>
 </section>
 <section class="slide cover">
